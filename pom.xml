@@ -1,0 +1,446 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.unified_streaming_ingestion_framework.spark</groupId>
+    <artifactId>unified_streaming_ingestion_framework</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <name>${project.artifactId}</name>
+
+    <properties>
+        <encoding>UTF-8</encoding>
+        <scala.version>2.12.10</scala.version>
+        <spark.version>3.5.2</spark.version>
+        <scala.spark.version>2.12</scala.spark.version>
+        <sample.utils.version>1.1.2</sample.utils.version>
+        <confluent.version>7.7.3</confluent.version>
+        <abris.version>6.4.1</abris.version>
+        <delta.version>3.2.0</delta.version>
+        <mysql.jdbc.version>8.0.30</mysql.jdbc.version>
+        <scalaj.http.version>2.4.2</scalaj.http.version>
+        <jar.scope>compile</jar.scope>
+        <distribution.respository.id>snapshots</distribution.respository.id>
+        <hadoop.version>3.3.4</hadoop.version>
+        <commonsemail.version>1.5</commonsemail.version>
+        <springvault.version>2.3.2</springvault.version>
+        <mssql.jdbc.version>12.8.1.jre11</mssql.jdbc.version>
+    </properties>
+
+    <repositories>
+        <repository>
+            <id>confluent</id>
+            <url>https://packages.confluent.io/maven/</url>
+        </repository>
+    </repositories>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.hadoop</groupId>
+            <artifactId>hadoop-aws</artifactId>
+            <version>${hadoop.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.hadoop</groupId>
+            <artifactId>hadoop-client-api</artifactId>
+            <version>${hadoop.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.delta</groupId>
+            <artifactId>delta-spark_${scala.spark.version}</artifactId>
+            <version>${delta.version}</version>
+            <scope>${jar.scope}</scope>
+        </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>${mysql.jdbc.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.microsoft.sqlserver</groupId>
+            <artifactId>mssql-jdbc</artifactId>
+            <version>${mssql.jdbc.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-hive_${scala.spark.version}</artifactId>
+            <version>${spark.version}</version>
+            <scope>${jar.scope}</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.codehaus.jackson</groupId>
+                    <artifactId>jackson-mapper-asl</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-avro_${scala.spark.version}</artifactId>
+            <version>${spark.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.scalaj</groupId>
+            <artifactId>scalaj-http_${scala.spark.version}</artifactId>
+            <version>${scalaj.http.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.scalatest</groupId>
+            <artifactId>scalatest_${scala.spark.version}</artifactId>
+            <version>3.0.8</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-email</artifactId>
+            <version>${commonsemail.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.vault</groupId>
+            <artifactId>spring-vault-core</artifactId>
+            <version>${springvault.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.fasterxml.jackson.core</groupId>
+                    <artifactId>jackson-databind</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>com.typesafe</groupId>
+            <artifactId>config</artifactId>
+            <version>1.4.2</version>
+        </dependency>
+        <!-- Scala standard library -->
+        <dependency>
+            <groupId>org.scala-lang</groupId>
+            <artifactId>scala-library</artifactId>
+            <version>${scala.version}</version>
+        </dependency>
+        <!-- Spark SQL (Structured Streaming) -->
+        <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-sql_${scala.spark.version}</artifactId>
+            <version>${spark.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Spark core -->
+        <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-core_${scala.spark.version}</artifactId>
+            <version>${spark.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Kafka client pin -->
+        <dependency>
+            <groupId>org.apache.kafka</groupId>
+            <artifactId>kafka-clients</artifactId>
+            <version>3.6.1</version>
+        </dependency>
+
+        <!-- Confluent common utils -->
+        <dependency>
+            <groupId>io.confluent</groupId>
+            <artifactId>common-utils</artifactId>
+            <version>${confluent.version}</version>
+        </dependency>
+
+        <!-- Abris (you've intentionally excluded all transitive deps) -->
+        <dependency>
+            <groupId>za.co.absa</groupId>
+            <artifactId>abris_${scala.spark.version}</artifactId>
+            <version>${abris.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>*</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+
+        <!-- DStreams lib (if you actually still use it); otherwise remove -->
+        <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-streaming_${scala.spark.version}</artifactId>
+            <version>${spark.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Kafka connector for Structured Streaming (typically bundled in your app jar) -->
+        <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-sql-kafka-0-10_${scala.spark.version}</artifactId>
+            <version>${spark.version}</version>
+        </dependency>
+
+        <!-- Confluent SR client + serializer -->
+        <dependency>
+            <groupId>io.confluent</groupId>
+            <artifactId>kafka-schema-registry-client</artifactId>
+            <version>${confluent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.confluent</groupId>
+            <artifactId>kafka-avro-serializer</artifactId>
+            <version>${confluent.version}</version>
+            <exclusions>
+                <!-- avoid Jackson clashes with Spark -->
+                <exclusion>
+                    <groupId>com.fasterxml.jackson.core</groupId>
+                    <artifactId>jackson-core</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.fasterxml.jackson.core</groupId>
+                    <artifactId>jackson-databind</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.fasterxml.jackson.core</groupId>
+                    <artifactId>jackson-annotations</artifactId>
+                </exclusion>
+                <!-- keep your original -->
+                <exclusion>
+                    <groupId>jakarta.ws.rs</groupId>
+                    <artifactId>jakarta.ws.rs-api</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <!-- Logging bridge -->
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-slf4j2-impl</artifactId>
+            <version>2.20.0</version>
+        </dependency>
+
+        <!-- Tests -->
+        <dependency>
+            <groupId>com.holdenkarau</groupId>
+            <artifactId>spark-testing-base_2.12</artifactId>
+            <version>3.5.2_2.0.1</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.apache.spark</groupId>
+                <artifactId>spark-hive_${scala.spark.version}</artifactId>
+                <scope>provided</scope>
+                <version>${spark.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>com.fasterxml.jackson.core</groupId>
+                        <artifactId>jackson-core</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals><goal>jar</goal></goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.6</version>
+                <configuration>
+                    <skipTests>true</skipTests>
+                </configuration>
+            </plugin>
+
+            <!-- JFrog publish (unchanged) -->
+            <plugin>
+                <groupId>org.jfrog.buildinfo</groupId>
+                <artifactId>artifactory-maven-plugin</artifactId>
+                <version>3.6.1</version>
+                <inherited>false</inherited>
+                <executions>
+                    <execution>
+                        <id>build-info</id>
+                        <goals><goal>publish</goal></goals>
+                        <configuration>
+                            <artifactory><includeEnvVars>false</includeEnvVars></artifactory>
+                            <deployProperties>
+                                <agent.name>{{AGENT_NAME}}</agent.name>
+                                <agent.version>{{AGENT_VERSION}}</agent.version>
+                                <build.id>{{BUILD_ID}}</build.id>
+                                <vcs.branch>{{VCS_BRANCH}}</vcs.branch>
+                                <vcs.url>{{VCS_URL}}</vcs.url>
+                                <vcs.revision>{{VCS_REVISION}}</vcs.revision>
+                            </deployProperties>
+                            <buildInfo>
+                                <agentName>{{AGENT_NAME}}</agentName>
+                                <agentVersion>{{AGENT_VERSION}}</agentVersion>
+                                <buildName>{{BUILD_NAME}}</buildName>
+                                <buildNumber>{{BUILD_NUMBER}}</buildNumber>
+                                <buildUrl>{{BUILD_URL}}</buildUrl>
+                                <vcsRevision>{{VCS_REVISION}}</vcsRevision>
+                                <principal>{{BUILD_PRINCIPAL}}</principal>
+                            </buildInfo>
+                            <publisher>
+                                <contextUrl>https://artifacts.samplerj.com/artifactory</contextUrl>
+                                <repoKey>maven-local</repoKey>
+                                <snapshotRepoKey>maven-local</snapshotRepoKey>
+                                <publishArtifacts>true</publishArtifacts>
+                                <publishBuildInfo>true</publishBuildInfo>
+                                <username>${artifactory_username}</username>
+                                <password>${artifactory_password}</password>
+                            </publisher>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- scalatest runner (unchanged) -->
+            <plugin>
+                <groupId>org.scalatest</groupId>
+                <artifactId>scalatest-maven-plugin</artifactId>
+                <version>1.0</version>
+                <configuration>
+                    <reportsDirectory>${project.build.directory}/surefire-reports</reportsDirectory>
+                    <junitxml>.</junitxml>
+                    <skipTests>true</skipTests>
+                    <filereports>TestSuite.txt</filereports>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>test</id>
+                        <goals><goal>test</goal></goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>net.alchim31.maven</groupId>
+                <artifactId>scala-maven-plugin</artifactId>
+                <version>4.8.1</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>compile</goal>
+                            <goal>testCompile</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>scala-test-compile</id>
+                        <phase>process-test-resources</phase>
+                        <goals><goal>testCompile</goal></goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>flatten-maven-plugin</artifactId>
+                <version>1.2.2</version>
+                <configuration><updatePomFile>true</updatePomFile></configuration>
+                <executions>
+                    <execution>
+                        <id>flatten</id>
+                        <phase>process-resources</phase>
+                        <goals><goal>flatten</goal></goals>
+                    </execution>
+                    <execution>
+                        <id>flatten.clean</id>
+                        <phase>clean</phase>
+                        <goals><goal>clean</goal></goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>8</source>
+                    <target>8</target>
+                </configuration>
+            </plugin>
+
+            <!-- Shade (unchanged except you are excluding Spark via provided scope above) -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.6.0</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals><goal>shade</goal></goals>
+                        <configuration>
+                            <relocations>
+                                <relocation>
+                                    <pattern>com.google.gson</pattern>
+                                    <shadedPattern>shaded.com.google.gson</shadedPattern>
+                                </relocation>
+                            </relocations>
+                            <filters>
+                                <filter>
+                                    <artifact>*:*</artifact>
+                                    <excludes>
+                                        <exclude>org/apache/logging/**</exclude>
+                                        <exclude>org/apache/log4j/**</exclude>
+                                        <exclude>org/apache/hadoop/**</exclude>
+                                        <exclude>org/apache/htrace/**</exclude>
+                                        <exclude>org/apache/zookeeper/**</exclude>
+                                        <exclude>com/fasterxml/jackson/**</exclude>
+                                        <exclude>com/nimbusds/**</exclude>
+                                        <exclude>org/slf4j/**</exclude>
+                                        <exclude>scala/**</exclude>
+                                        <exclude>net/minidev/**</exclude>
+                                        <exclude>org/ow2/asm/**</exclude>
+                                        <exclude>io/delta/**</exclude>
+                                        <exclude>META-INF/*.SF</exclude>
+                                        <exclude>META-INF/*.DSA</exclude>
+                                        <exclude>META-INF/*.RSA</exclude>
+                                    </excludes>
+                                </filter>
+                            </filters>
+                            <transformers>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                                    <resource>META-INF/services/org.apache.spark.sql.sources.DataSourceRegister</resource>
+                                </transformer>
+                            </transformers>
+                            <shadedArtifactAttached>true</shadedArtifactAttached>
+                            <shadedClassifierName>uber</shadedClassifierName>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <distributionManagement>
+        <repository>
+            <id>central</id>
+            <name>maven-releases</name>
+            <url>https://artifacts.samplerj.com/artifactory/maven-local/</url>
+            <layout>default</layout>
+        </repository>
+        <snapshotRepository>
+            <id>snapshots</id>
+            <name>maven-snapshots</name>
+            <url>https://artifacts.samplerj.com/artifactory/maven-local/</url>
+            <layout>default</layout>
+        </snapshotRepository>
+    </distributionManagement>
+</project>
